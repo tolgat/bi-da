@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "BiDa",
+    "packageName": "com.totu",
+    "packageFolder": "com/totu",
+    "authenticationType": "session",
+    "hibernateCache": "hazelcast",
+    "clusteredHttpSession": "hazelcast",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
+    "buildTool": "gradle",
+    "frontendBuilder": "gulp",
+    "enableTranslation": true,
+    "enableSocialSignIn": true,
+    "rememberMeKey": "579e635ef99ba5c11890f8cb2ca910983bc1798f",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
