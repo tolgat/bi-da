@@ -1,0 +1,133 @@
+# parse edilecek ilan
+
+<body>
+<div id="container">
+  <div id="classifiedDetail">
+     <div class="classifiedDetail">
+
+	   *********************************
+	   <div class="classifiedDetailTitle">
+		 <h1>BRANDİUM TOWER DA 1+0 DAİRE</h1>
+			<ul class="classifiedEvents ">
+				<li>
+					<a rel="nofollow" id="classifiedShareButtons" class="classifiedShare trackClick trackId_ilan_paylas">
+						Paylaş</a>
+				</li>
+				<li>
+					<a rel="nofollow" href="#" class="classifiedPrint" id="yazdir">
+						Yazdır</a>
+				</li>
+				<li>
+						<a rel="nofollow" href="https://secure.sahibinden.com/giris/?return_url=/ajax/favorites/addToFavorites?classifiedId=216059701" class="classifiedAddFavorite trackLinkClick trackId_favorite">
+							Favorilerime Ekle</a>
+					</li>
+				</ul>
+		</div>
+		*********************************
+
+		<div class="classifiedDetailContent">
+
+            <div class="classifiedInfo ">
+
+                        <h3>
+                     1.200 TL</h3>
+                    <h2>
+                            <a href="/kiralik-residence?address_country=1&amp;address_city=34">
+                                        İstanbul</a>
+                                <span>/</span>
+
+                                            <a href="/kiralik-residence?address_country=1&amp;address_city=34&amp;address_town=447">
+                                                Ataşehir</a>
+                                        <span>/</span>
+
+                                            <a href="/kiralik-residence?address_country=1&amp;address_city=34&amp;address_town=447&amp;address_quarter=23179">
+                                                Küçükbakkalköy Mah.</a>
+                                        </h2>
+
+                  <ul class="classifiedInfoList">
+
+                    <li>
+                        <strong>İlan No</strong>&nbsp;
+                        <span class="classifiedId" id="classifiedId">173777667</span>
+                        </li>
+                    <li>
+                            <strong>
+                                İlan Tarihi</strong>&nbsp;
+                            <span>
+                                10 Kasım 2015</span>
+                        </li>
+                    <li>
+                                <strong>Emlak Tipi</strong>&nbsp;
+                                <span>Kiralık Residence&nbsp;</span>
+                            </li>
+                        <li>
+                                <strong>m²</strong>&nbsp;
+                                <span class="">
+                                    39</span>
+                            </li>
+                        <li>
+                                <strong>Oda Sayısı</strong>&nbsp;
+                                <span class="">
+                                    Stüdyo (1+0)</span>
+                            </li>
+                        <li>
+                                <strong>Bina Yaşı</strong>&nbsp;
+                                <span class="">
+                                    0</span>
+                            </li>
+                        <li>
+                                <strong>Bulunduğu Kat</strong>&nbsp;
+                                <span class="">
+                                    21</span>
+                            </li>
+                        <li>
+                                <strong>Kat Sayısı</strong>&nbsp;
+                                <span class="">
+                                    29</span>
+                            </li>
+                        <li>
+                                <strong>Isıtma</strong>&nbsp;
+                                <span class="">
+                                    Merkezi Sistem (Isı Pay Ölçer)</span>
+                            </li>
+                        <li>
+                                <strong>Banyo Sayısı</strong>&nbsp;
+                                <span class="">
+                                    1</span>
+                            </li>
+                        <li>
+                                <strong>Eşyalı</strong>&nbsp;
+                                <span class="">
+                                    Hayır</span>
+                            </li>
+                        <li>
+                                <strong>Kullanım Durumu</strong>&nbsp;
+                                <span class="">
+                                    Boş</span>
+                            </li>
+                        <li>
+                                <strong>Site İçerisinde</strong>&nbsp;
+                                <span class="">
+                                    Evet</span>
+                            </li>
+                        <li>
+                                <strong>Aidat (TL)</strong>&nbsp;
+                                <span class="">
+                                    Belirtilmemiş</span>
+                            </li>
+                        <li>
+                                <strong>Krediye Uygun</strong>&nbsp;
+                                <span class="">
+                                    Hayır</span>
+                            </li>
+                        <li>
+                                <strong>Kimden</strong>&nbsp;
+                                <span class="">
+                                    Emlak Ofisinden</span>
+                            </li>
+                        </ul>
+                <p class="classifiedIdBox  ">
+                        <a href="#" rel="nofollow" class="trackClick trackId_feedback classifiedFeedback">
+                                <span>İlan ile İlgili Şikayetim Var</span>
+                            </a>
+                        </p></div>
