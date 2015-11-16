@@ -1,3 +1,6 @@
+doc.select("div#container")
+getAllElements()
+
 # parse edilecek ilan
 
 <body>
