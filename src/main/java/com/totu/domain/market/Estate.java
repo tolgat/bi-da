@@ -10,13 +10,14 @@ public class Estate extends AbstractItem {
     private String publishDateStr;
     private String title;
     private Long price;
+    private String currency;
     private String rooms;
-    private Integer m2;
+    private String m2;
     private String type; // Satılık Daire
     private String age;
-    private Integer floor; // bulundugu kat
-    private Integer totalFloors;
-    private Integer bathrooms;
+    private String floor; // bulundugu kat
+    private String totalFloors;
+    private String bathrooms;
     private Boolean withFurniture;
     private Boolean inSite;
     private String siteMonthlyFee; //aidat
@@ -78,6 +79,14 @@ public class Estate extends AbstractItem {
         this.price = price;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public String getRooms() {
         return rooms;
     }
@@ -86,11 +95,11 @@ public class Estate extends AbstractItem {
         this.rooms = rooms;
     }
 
-    public Integer getM2() {
+    public String getM2() {
         return m2;
     }
 
-    public void setM2(Integer m2) {
+    public void setM2(String m2) {
         this.m2 = m2;
     }
 
@@ -110,27 +119,27 @@ public class Estate extends AbstractItem {
         this.age = age;
     }
 
-    public Integer getFloor() {
+    public String getFloor() {
         return floor;
     }
 
-    public void setFloor(Integer floor) {
+    public void setFloor(String floor) {
         this.floor = floor;
     }
 
-    public Integer getTotalFloors() {
+    public String getTotalFloors() {
         return totalFloors;
     }
 
-    public void setTotalFloors(Integer totalFloors) {
+    public void setTotalFloors(String totalFloors) {
         this.totalFloors = totalFloors;
     }
 
-    public Integer getBathrooms() {
+    public String getBathrooms() {
         return bathrooms;
     }
 
-    public void setBathrooms(Integer bathrooms) {
+    public void setBathrooms(String bathrooms) {
         this.bathrooms = bathrooms;
     }
 

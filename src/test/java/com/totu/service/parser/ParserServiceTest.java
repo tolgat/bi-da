@@ -1,15 +1,18 @@
 package com.totu.service.parser;
 
+import com.totu.IntegrationTestAbstractTestNg;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
+import javax.inject.Inject;
 
 
-public class ParserServiceTest {
+public class ParserServiceTest extends IntegrationTestAbstractTestNg {
+
+    @Inject
+    ParserService parserService;
 
     @Test
-    public void testParseSite1() throws Exception {
-        ParserService parserService = new ParserService();
-        parserService.parseSite1();
+    public void testAll() throws Exception {
+        parserService.parseAll();;
     }
 }
