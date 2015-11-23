@@ -1,0 +1,2 @@
+mongodb'de alttaki index'i yarat!
+db.estate.createIndex({"resourceSite":1, "remoteId":1})

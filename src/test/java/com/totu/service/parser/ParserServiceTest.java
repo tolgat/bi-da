@@ -13,6 +13,6 @@ public class ParserServiceTest extends IntegrationTestAbstractTestNg {
 
     @Test
     public void testAll() throws Exception {
-        parserService.parseAll();;
+        parserService.parseAll();
     }
 }

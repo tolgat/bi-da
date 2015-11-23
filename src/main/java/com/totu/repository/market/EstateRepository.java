@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface EstateRepository extends MongoRepository<Estate, String> {
 
-    public Estate findByUrl(String url);
-    public List<Estate> findBySiteName(String siteName);
+    public List<Estate> findByRemoteId(String remoteId);
 }

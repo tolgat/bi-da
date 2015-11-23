@@ -8,10 +8,9 @@ public abstract class AbstractItem {
     // mongodb'de internal kullanilan ID
     @Id
     private String id;
-
+    private Site resourceSite;
     private String name;
     private String desc;
-    private String siteName;
     private String url;
     private String remoteId;
     private ZonedDateTime createdDate;
@@ -19,8 +18,16 @@ public abstract class AbstractItem {
     @Override
     public String toString() {
         return String.format(
-            "AbstractItem[id=%s, name=%s, desc='%s', siteName='%s', url='%s', remoteId='%s', indexDate='%s']",
-            id, name, desc, siteName, url, remoteId, createdDate);
+            "AbstractItem[id=%s, resourceSite=%s, name=%s, desc='%s', url='%s', remoteId='%s', indexDate='%s']",
+            id, resourceSite, name, desc, url, remoteId, createdDate);
+    }
+
+    public Site getResourceSite() {
+        return resourceSite;
+    }
+
+    public void setResourceSite(Site resourceSite) {
+        this.resourceSite = resourceSite;
     }
 
     public String getId() {
@@ -45,14 +52,6 @@ public abstract class AbstractItem {
 
     public void setDesc(String desc) {
         this.desc = desc;
-    }
-
-    public String getSiteName() {
-        return siteName;
-    }
-
-    public void setSiteName(String siteName) {
-        this.siteName = siteName;
     }
 
     public String getUrl() {

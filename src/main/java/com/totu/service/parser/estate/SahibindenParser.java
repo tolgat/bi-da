@@ -4,7 +4,6 @@ import com.totu.domain.Price;
 import com.totu.domain.market.Estate;
 import com.totu.domain.market.Site;
 import com.totu.repository.market.EstateRepository;
-import com.totu.service.parser.AbstractParser;
 import com.totu.service.parser.ParserUtil;
 import com.totu.service.util.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,20 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
-public class Sahibinden extends AbstractParser {
+public class SahibindenParser extends AbstractEstateParser {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Sahibinden.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SahibindenParser.class);
 
-    EstateRepository estateRepository;
 
-    public Sahibinden(EstateRepository estateRepository) {
+    public SahibindenParser(EstateRepository estateRepository) {
         this.estateRepository = estateRepository;
     }
 
@@ -79,6 +74,7 @@ public class Sahibinden extends AbstractParser {
             Document docWhole = getDocument(url);
             Element part = docWhole.getElementById("classifiedDetail");
             item.setResourceSite(Site.SAHIBINDEN);
+            item.setUrl(url);
             item.setTitle(part.getElementsByClass("classifiedDetailTitle").select("h1").text());
 
             // price
@@ -97,7 +93,7 @@ public class Sahibinden extends AbstractParser {
             for (Element li : lis) {
                 String tag = StringUtils.trim(ParserUtil.nbspToBlank(li.childNodes().get(1).childNodes().get(0).toString()));
                 String val = StringUtils.trim(ParserUtil.nbspToBlank(li.childNodes().get(3).childNodes().get(0).toString()));
-                if (equalsIgnoreCase(tag, "İlan No")) item.setExternalId(val);
+                if (equalsIgnoreCase(tag, "İlan No")) item.setRemoteId(val);
                 else if (equalsIgnoreCase(tag, "İlan Tarihi")) item.setPublishDateStr(val);
                 else if (equalsIgnoreCase(tag, "Emlak Tipi")) item.setType(val);
                 else if (equalsIgnoreCase(tag, "m²")) item.setM2(val);
@@ -125,8 +121,7 @@ public class Sahibinden extends AbstractParser {
             }
             item.setProperties(propMap);
 
-            //print(LOG, Utils.convertObjectToJsonStringSafe(item));
-            estateRepository.save(item);
+            saveOne(item);
 
         } catch (IOException e) {
             e.printStackTrace();

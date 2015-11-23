@@ -86,6 +86,9 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jackson_version
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
+    compile group: 'net.minidev', name: 'json-smart', version:json_smart
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path
+
     compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')

@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class Estate extends AbstractItem {
 
-    private Site resourceSite;
-    private String externalId;
     private String publishDateStr;
     private String title;
     private Long price;
@@ -36,24 +34,9 @@ public class Estate extends AbstractItem {
     public String toString() {
         return String.format(
             "AbstractItem[%s, resourceSite= %s, externalId=%s, price=%d, rooms='%s']",
-            super.toString(), resourceSite.name(), externalId, price, rooms);
+            super.toString(), price, rooms);
     }
 
-    public Site getResourceSite() {
-        return resourceSite;
-    }
-
-    public void setResourceSite(Site resourceSite) {
-        this.resourceSite = resourceSite;
-    }
-
-    public String getExternalId() {
-        return externalId;
-    }
-
-    public void setExternalId(String externalId) {
-        this.externalId = externalId;
-    }
 
     public String getPublishDateStr() {
         return publishDateStr;

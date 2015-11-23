@@ -4,6 +4,7 @@ package com.totu.service.parser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.io.IOException;
 
@@ -24,7 +25,6 @@ public abstract class AbstractParser {
             .cookie("auth", "token")
             .get();
     }
-
 
     protected static String trim(String s, int width) {
         if (s.length() > width)
