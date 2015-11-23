@@ -19,12 +19,12 @@ import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
-public class SahibindenParser extends AbstractEstateParser {
+public class SahibindenEstateParser extends AbstractEstateParser {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SahibindenParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SahibindenEstateParser.class);
 
 
-    public SahibindenParser(EstateRepository estateRepository) {
+    public SahibindenEstateParser(EstateRepository estateRepository) {
         this.estateRepository = estateRepository;
     }
 
@@ -111,16 +111,20 @@ public class SahibindenParser extends AbstractEstateParser {
 
             // Diğer özellikler;
             Map<String, String> propMap = new HashMap<>();
-            Elements propUls = docWhole.getElementById("classifiedProperties").select("ul");
-            for (Element propUl : propUls) {
-                Elements propLis = propUl.select("li.selected");
-                for (Element propLi : propLis) {
-                    String value = StringUtils.trim(ParserUtil.nbspToBlank(propLi.text()));
-                    propMap.put(value, null);
+            Element classifiedProps = docWhole.getElementById("classifiedProperties");
+            if(classifiedProps!=null) {
+                Elements propUls = classifiedProps.select("ul");
+                if (propUls != null) {
+                    for (Element propUl : propUls) {
+                        Elements propLis = propUl.select("li.selected");
+                        for (Element propLi : propLis) {
+                            String value = StringUtils.trim(ParserUtil.nbspToBlank(propLi.text()));
+                            propMap.put(value, null);
+                        }
+                    }
+                    item.setProperties(propMap);
                 }
             }
-            item.setProperties(propMap);
-
             saveOne(item);
 
         } catch (IOException e) {
@@ -157,5 +161,6 @@ public class SahibindenParser extends AbstractEstateParser {
         }
         return price;
     }
+
 
 }

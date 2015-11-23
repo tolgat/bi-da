@@ -14,6 +14,6 @@ public class SahibindenTest  extends IntegrationTestAbstractTestNg {
 
     @Test
     public void testOneItem() throws Exception {
-        new SahibindenParser(estateRepository).parseItem("http://www.sahibinden.com/ilan/emlak-konut-satilik-bodrum-akyarlar-satilik-dublex-184779987/detay");
+        new SahibindenEstateParser(estateRepository).parseItem("http://www.sahibinden.com/ilan/emlak-konut-satilik-bodrum-akyarlar-satilik-dublex-184779987/detay");
     }
 }
