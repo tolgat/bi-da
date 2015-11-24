@@ -87,7 +87,7 @@ public class SahibindenCrawler extends AbstractCrawler {
 
 
                                             //FIXME: sadece istanbul/ataşehir'i test edelim
-                                            if (city.getId() == 10 && quarter.getId() == 6931) {
+                                            if (city.getId() == 1 && quarter.getId() == 293) {
                                                 LOG.debug("parse " + parseUrl);
                                                 SahibindenEstateParser sahibindenEstateParser = new SahibindenEstateParser(estateRepository);
                                                 sahibindenEstateParser.parse(parseUrl);

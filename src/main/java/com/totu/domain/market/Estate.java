@@ -11,6 +11,7 @@ public class Estate extends AbstractItem {
     private String currency;
     private String rooms;
     private String m2;
+    private String m2Price;
     private String type; // Satılık Daire
     private String age;
     private String floor; // bulundugu kat
@@ -21,11 +22,30 @@ public class Estate extends AbstractItem {
     private String siteMonthlyFee; //aidat
     private Boolean creditable;
     private String seller;
+    private String heating;
+
 
     // location
     private String city;
     private String district; // ilçe
     private String neighborhood;
+
+    //
+    private String ada;
+    private String parsel;
+    private String pafta;
+    private String kaks;
+    private String gabari;
+    private String tapu;
+    private String imar;
+    private String takas;
+
+    private String numberOfHouseInAFloor;
+
+
+    private String donem;
+    private String sure;
+
 
     private Map properties;
 
@@ -84,6 +104,14 @@ public class Estate extends AbstractItem {
 
     public void setM2(String m2) {
         this.m2 = m2;
+    }
+
+    public String getM2Price() {
+        return m2Price;
+    }
+
+    public void setM2Price(String m2Price) {
+        this.m2Price = m2Price;
     }
 
     public String getType() {
@@ -190,11 +218,107 @@ public class Estate extends AbstractItem {
         this.neighborhood = neighborhood;
     }
 
+    public String getAda() {
+        return ada;
+    }
+
+    public void setAda(String ada) {
+        this.ada = ada;
+    }
+
+    public String getParsel() {
+        return parsel;
+    }
+
+    public void setParsel(String parsel) {
+        this.parsel = parsel;
+    }
+
+    public String getPafta() {
+        return pafta;
+    }
+
+    public void setPafta(String pafta) {
+        this.pafta = pafta;
+    }
+
+    public String getKaks() {
+        return kaks;
+    }
+
+    public void setKaks(String kaks) {
+        this.kaks = kaks;
+    }
+
+    public String getGabari() {
+        return gabari;
+    }
+
+    public void setGabari(String gabari) {
+        this.gabari = gabari;
+    }
+
+    public String getTapu() {
+        return tapu;
+    }
+
+    public void setTapu(String tapu) {
+        this.tapu = tapu;
+    }
+
+    public String getImar() {
+        return imar;
+    }
+
+    public void setImar(String imar) {
+        this.imar = imar;
+    }
+
+    public String getTakas() {
+        return takas;
+    }
+
+    public void setTakas(String takas) {
+        this.takas = takas;
+    }
+
     public Map getProperties() {
         return properties;
     }
 
     public void setProperties(Map properties) {
         this.properties = properties;
+    }
+
+    public String getNumberOfHouseInAFloor() {
+        return numberOfHouseInAFloor;
+    }
+
+    public void setNumberOfHouseInAFloor(String numberOfHouseInAFloor) {
+        this.numberOfHouseInAFloor = numberOfHouseInAFloor;
+    }
+
+    public String getHeating() {
+        return heating;
+    }
+
+    public void setHeating(String heating) {
+        this.heating = heating;
+    }
+
+    public String getDonem() {
+        return donem;
+    }
+
+    public void setDonem(String donem) {
+        this.donem = donem;
+    }
+
+    public String getSure() {
+        return sure;
+    }
+
+    public void setSure(String sure) {
+        this.sure = sure;
     }
 }

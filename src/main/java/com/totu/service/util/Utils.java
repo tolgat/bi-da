@@ -89,24 +89,23 @@ public class Utils {
     }
 
 
-    public static String objectToString(Object o){
-        if(o != null){
+    public static String objectToString(Object o) {
+        if (o != null) {
             return String.valueOf(o);
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-    public static Integer objectToInteger(Object o){
-        if(o==null){
+    public static Integer objectToInteger(Object o) {
+        if (o == null) {
             return null;
         }
 
         Integer i;
-        try{
+        try {
             i = Integer.parseInt(String.valueOf(o));
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             i = null;
         }
         return i;
@@ -126,32 +125,32 @@ public class Utils {
         return i;
     }
 
-    public static Double objectToDouble(Object o){
-        if(o==null){
+    public static Double objectToDouble(Object o) {
+        if (o == null) {
             return null;
         }
 
         Double i;
-        try{
+        try {
             i = Double.parseDouble(String.valueOf(o));
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             i = null;
         }
         return i;
     }
 
+    //.userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
     public static Document getJsoupDocument(String url) throws IOException {
         return Jsoup.connect(url)
             .timeout(30 * 1000)
             .referrer("http://www.google.com")
-                //.userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US;   rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
             .userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
             .cookie("auth", "token")
             .ignoreContentType(true)
             .get();
     }
 
-    public void appendProcessLog(StringBuilder sb, String msg, Exception e) {
+    public static void appendProcessLog(StringBuilder sb, String msg, Exception e) {
         sb.append("[").append(msg).append(":").append(ExceptionUtils.getRootCauseMessage(e)).append("] ");
 
     }

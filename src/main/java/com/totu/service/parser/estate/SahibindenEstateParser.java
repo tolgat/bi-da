@@ -74,7 +74,7 @@ public class SahibindenEstateParser extends AbstractEstateParser {
 
     @Override
     protected void parseItem(String url) {
-        StringBuilder processLog = new StringBuilder();
+        StringBuilder processLogSb = new StringBuilder();
 
         try {
             Estate item = new Estate();
@@ -88,7 +88,7 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                     try {
                         item.setTitle(part.getElementsByClass("classifiedDetailTitle").select("h1").text());
                     } catch (Exception e) {
-                        item.appendProcessLog("Title alinamadi", e);
+                        Utils.appendProcessLog(processLogSb, "Title alinamadi", e);
                     }
 
                     // price
@@ -97,7 +97,7 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                         item.setPrice(price.getPrice());
                         item.setCurrency(price.getCurrency());
                     } catch (Exception e) {
-                        item.appendProcessLog("Price alinamadi", e);
+                        Utils.appendProcessLog(processLogSb, "Price alinamadi", e);
                     }
 
                     // Lokasyon
@@ -107,7 +107,7 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                         item.setDistrict(locations.get(1).text());
                         item.setNeighborhood(locations.get(2).text());
                     } catch (Exception e) {
-                        item.appendProcessLog("Location alinamadi", e);
+                        Utils.appendProcessLog(processLogSb, "Location alinamadi", e);
                     }
 
                     // Ana özellikler
@@ -119,19 +119,22 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                         try {
                             tag = StringUtils.trim(ParserUtil.nbspToBlank(li.childNodes().get(1).childNodes().get(0).toString()));
                         } catch (Exception e) {
-                            item.appendProcessLog("Tag alinamadi", e);
+                            Utils.appendProcessLog(processLogSb, "Tag alinamadi", e);
                         }
                         try {
                             val = StringUtils.trim(ParserUtil.nbspToBlank(li.childNodes().get(3).childNodes().get(0).toString()));
                         } catch (Exception e) {
-                            item.appendProcessLog("Value alinamadi", e);
+                            Utils.appendProcessLog(processLogSb, "Value alinamadi", e);
                         }
 
                         if (equalsIgnoreCase(tag, "İlan No")) item.setRemoteId(val);
                         else if (equalsIgnoreCase(tag, "İlan Tarihi")) item.setPublishDateStr(val);
-                        else if (equalsIgnoreCase(tag, "Emlak Tipi")) item.setType(val);
+                        else if (equalsIgnoreCase(tag, "Tipi") || equalsIgnoreCase(tag, "Emlak Tipi"))
+                            item.setType(val);
                         else if (equalsIgnoreCase(tag, "m²")) item.setM2(val);
-                        else if (equalsIgnoreCase(tag, "Oda Sayısı")) item.setRooms(val);
+                        else if (equalsIgnoreCase(tag, "m² Fiyatı")) item.setM2Price(val);
+                        else if (equalsIgnoreCase(tag, "Oda Sayısı") || equalsIgnoreCase(tag, "Bölüm & Oda Sayısı"))
+                            item.setRooms(val);
                         else if (equalsIgnoreCase(tag, "Bina Yaşı")) item.setAge(val);
                         else if (equalsIgnoreCase(tag, "Bulunduğu Kat")) item.setFloor(val);
                         else if (equalsIgnoreCase(tag, "Kat Sayısı")) item.setTotalFloors(val);
@@ -139,9 +142,24 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                         else if (equalsIgnoreCase(tag, "Eşyalı")) item.setWithFurniture(Utils.convertToBoolean(val));
                         else if (equalsIgnoreCase(tag, "Site İçerisinde")) item.setInSite(Utils.convertToBoolean(val));
                         else if (equalsIgnoreCase(tag, "Aidat (TL)")) item.setSiteMonthlyFee(val);
-                        else if (equalsIgnoreCase(tag, "Krediye Uygun"))
+                        else if (equalsIgnoreCase(tag, "İmar Durumu")) item.setImar(val);
+                        else if (equalsIgnoreCase(tag, "Krediye Uygun") || equalsIgnoreCase(tag, "Krediye Uygunluk"))
                             item.setCreditable(Utils.convertToBoolean(val));
                         else if (equalsIgnoreCase(tag, "Kimden")) item.setSeller(val);
+                        else if (equalsIgnoreCase(tag, "Ada No")) item.setAda(val);
+                        else if (equalsIgnoreCase(tag, "Parsel No")) item.setParsel(val);
+                        else if (equalsIgnoreCase(tag, "Pafta No")) item.setPafta(val);
+                        else if (equalsIgnoreCase(tag, "Kaks (Emsal)")) item.setKaks(val);
+                        else if (equalsIgnoreCase(tag, "Gabari")) item.setGabari(val);
+                        else if (equalsIgnoreCase(tag, "Tapu Durumu")) item.setTapu(val);
+                        else if (equalsIgnoreCase(tag, "Takas")) item.setTakas(val);
+                        else if (equalsIgnoreCase(tag, "Bir Kattaki Daire")) item.setNumberOfHouseInAFloor(val);
+                        else if (equalsIgnoreCase(tag, "Isıtma tipi") || equalsIgnoreCase(tag, "Isıtma"))
+                            item.setHeating(val);
+                        else if (equalsIgnoreCase(tag, "Dönem")) item.setDonem(val);
+                        else if (equalsIgnoreCase(tag, "Süre")) item.setSure(val);
+
+                        //TODO: turistik-tesis attr'lari eklenecek
                     }
 
                     // Diğer özellikler;
@@ -158,9 +176,10 @@ public class SahibindenEstateParser extends AbstractEstateParser {
                         }
                         item.setProperties(propMap);
                     } catch (Exception e) {
-                        item.appendProcessLog("Other properties alinamadi", e);
+                        Utils.appendProcessLog(processLogSb, "Other properties alinamadi", e);
                     }
 
+                    item.setProcessLog(processLogSb.toString());
                     saveOne(item);
                 }
             }
