@@ -3,10 +3,10 @@ package com.totu.service.crawl.sahibinden.domain;
 
 public abstract class LocationDetail {
 
-    Integer locationId;
+    Long locationId;
     Double lat;
     Double lon;
-    Integer zoom;
+    Long zoom;
 
     @Override
     public String toString() {
@@ -14,11 +14,11 @@ public abstract class LocationDetail {
             locationId, lat, lon, zoom);
     }
 
-    public Integer getLocationId() {
+    public Long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(Integer locationId) {
+    public void setLocationId(Long locationId) {
         this.locationId = locationId;
     }
 
@@ -38,11 +38,11 @@ public abstract class LocationDetail {
         this.lon = lon;
     }
 
-    public Integer getZoom() {
+    public Long getZoom() {
         return zoom;
     }
 
-    public void setZoom(Integer zoom) {
+    public void setZoom(Long zoom) {
         this.zoom = zoom;
     }
 

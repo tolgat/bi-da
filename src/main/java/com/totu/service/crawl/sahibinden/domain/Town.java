@@ -2,7 +2,7 @@ package com.totu.service.crawl.sahibinden.domain;
 
 public class Town extends LocationDetail{
 
-    Integer id;
+    Long id;
     String name;
 
     @Override
@@ -10,11 +10,11 @@ public class Town extends LocationDetail{
         return String.format("id: %d, name: %s, ", id, name) + super.toString();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

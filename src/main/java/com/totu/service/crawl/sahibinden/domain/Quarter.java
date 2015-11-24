@@ -2,20 +2,20 @@ package com.totu.service.crawl.sahibinden.domain;
 
 public class Quarter extends LocationDetail{
 
-    Integer id;
+    Long id;
     String name;
-    Integer kmlId;
+    Long kmlId;
 
     @Override
     public String toString() {
         return String.format("id: %d, name: %s, ", id, name) + super.toString();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -27,11 +27,12 @@ public class Quarter extends LocationDetail{
         this.name = name;
     }
 
-    public Integer getKmlId() {
+    public Long getKmlId() {
         return kmlId;
     }
 
-    public void setKmlId(Integer kmlId) {
+    public void setKmlId(Long kmlId) {
         this.kmlId = kmlId;
     }
+
 }

@@ -1,20 +1,23 @@
 package com.totu.service.crawl.sahibinden.domain;
 
+import java.util.List;
+
 public class District{
 
-    Integer id;
+    Long id;
     String name;
+    List<Quarter> quarterList;
 
     @Override
     public String toString() {
         return String.format("id: %d, name: %s", id, name) + super.toString();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -26,6 +29,11 @@ public class District{
         this.name = name;
     }
 
+    public List<Quarter> getQuarterList() {
+        return quarterList;
+    }
 
-
+    public void setQuarterList(List<Quarter> quarterList) {
+        this.quarterList = quarterList;
+    }
 }

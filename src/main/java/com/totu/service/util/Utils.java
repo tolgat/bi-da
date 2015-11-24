@@ -2,11 +2,14 @@ package com.totu.service.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,6 +112,20 @@ public class Utils {
         return i;
     }
 
+    public static Long objectToLong(Object o) {
+        if (o == null) {
+            return null;
+        }
+
+        Long i;
+        try {
+            i = Long.parseLong(String.valueOf(o));
+        } catch (NumberFormatException nfe) {
+            i = null;
+        }
+        return i;
+    }
+
     public static Double objectToDouble(Object o){
         if(o==null){
             return null;
@@ -121,5 +138,21 @@ public class Utils {
             i = null;
         }
         return i;
+    }
+
+    public static Document getJsoupDocument(String url) throws IOException {
+        return Jsoup.connect(url)
+            .timeout(30 * 1000)
+            .referrer("http://www.google.com")
+                //.userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US;   rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+            .userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
+            .cookie("auth", "token")
+            .ignoreContentType(true)
+            .get();
+    }
+
+    public void appendProcessLog(StringBuilder sb, String msg, Exception e) {
+        sb.append("[").append(msg).append(":").append(ExceptionUtils.getRootCauseMessage(e)).append("] ");
+
     }
 }

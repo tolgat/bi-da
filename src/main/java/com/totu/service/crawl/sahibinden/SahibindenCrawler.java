@@ -7,10 +7,8 @@ import com.totu.service.crawl.sahibinden.domain.*;
 import com.totu.service.parser.estate.SahibindenEstateParser;
 import com.totu.service.util.RandomUtil;
 import com.totu.service.util.Utils;
-import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +26,23 @@ public class SahibindenCrawler extends AbstractCrawler {
 
     private static final Logger LOG = LoggerFactory.getLogger(SahibindenCrawler.class);
 
-    private static String TR_CODE = "1";
-    private static String ESTATE_CODE = "3518";
+    private static final String TR_CODE = "1";
 
-    EstateRepository estateRepository;
+    private final EstateRepository estateRepository;
 
     public SahibindenCrawler(EstateRepository estateRepository) {
         this.estateRepository = estateRepository;
     }
 
     public void crawl() {
+        crawlEstate();
+    }
 
+
+    private void crawlEstate() {
 
         // Emlak
-        List<String> categories = Arrays.asList(
+        final List<String> categories = Arrays.asList(
             "satilik",
             "kiralik",
             "gunluk-kiralik",
@@ -56,19 +57,50 @@ public class SahibindenCrawler extends AbstractCrawler {
             "emlak-turistik-tesis-satilik",
             "emlak-turistik-tesis-kiralik");
 
-        LinkedHashMap<String, Integer> categories1 = crawlSubCategories(ESTATE_CODE);
-        categories1.forEach((category, value) -> {
-            LOG.debug(category + ": " + value);
-        });
+        String ESTATE_CODE = "3518";
+        LinkedHashMap<String, Integer> estateSubCategories = crawlSubCategories(ESTATE_CODE);
+        if (estateSubCategories != null) {
+            estateSubCategories.forEach((category, value) -> LOG.debug(category + ": " + value));
+        }
 
         List<City> cityList = crawlCities();
-        cityList.forEach(city -> {
-            List<Town> townList = crawlTowns(city.getId().toString());
-            townList.forEach(town -> {
-                crawlDistricts(categories, TR_CODE, city, town);
-            });
+        if (cityList != null) {
+            cityList.forEach(city -> {
 
-        });
+                List<Town> townList = crawlTowns(city.getId().toString());
+                if (townList != null) {
+                    townList.forEach(town -> {
+
+                        List<District> districtList = crawlDistricts(town);
+                        if (districtList != null) {
+                            districtList.forEach(district -> {
+
+                                if (district.getQuarterList() != null) {
+                                    district.getQuarterList().forEach(quarter -> {
+
+                                        // her bir kategori icin parser'i cagir
+                                        categories.forEach(category -> {
+                                            String parseUrl = "http://www.sahibinden.com/" + category +
+                                                "?address_town=" + town.getId() +
+                                                "&address_city=" + city.getId() +
+                                                "&address_quarter=" + quarter.getId();
+
+
+                                            //FIXME: sadece istanbul/ataşehir'i test edelim
+                                            if (city.getId() == 10 && quarter.getId() == 6931) {
+                                                LOG.debug("parse " + parseUrl);
+                                                SahibindenEstateParser sahibindenEstateParser = new SahibindenEstateParser(estateRepository);
+                                                sahibindenEstateParser.parse(parseUrl);
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
 
     }
 
@@ -78,13 +110,12 @@ public class SahibindenCrawler extends AbstractCrawler {
         List<City> cityList = new ArrayList<>();
 
         try {
-            Document doc = getDocument(getUrl(URL_TYPE.CITY, TR_CODE));
-            JSONArray cities = JsonPath.parse(doc.body().text()).read("$.data." + TR_CODE);
+            Document doc = Utils.getJsoupDocument(getUrl(URL_TYPE.CITY, TR_CODE));
+            List<LinkedHashMap<String, Object>> cities = JsonPath.parse(doc.body().text()).read("$.data." + TR_CODE);
 
-            cities.forEach((item) -> {
-                LinkedHashMap<String, Object> cityMap = (LinkedHashMap<String, Object>) item;
+            cities.forEach((cityMap) -> {
                 City city = new City();
-                city.setId(Utils.objectToInteger(cityMap.get("id")));
+                city.setId(Utils.objectToLong(cityMap.get("id")));
                 city.setName(Utils.objectToString(cityMap.get("name")));
                 city.setTag(Utils.objectToString(cityMap.get("tag")));
                 city.setDisplayOrder(Utils.objectToInteger(cityMap.get("displayOrder")));
@@ -93,17 +124,17 @@ public class SahibindenCrawler extends AbstractCrawler {
                 //detail
                 LinkedHashMap detailMap = (LinkedHashMap) cityMap.get("detail");
                 if (detailMap != null) {
-                    city.setLocationId(Utils.objectToInteger(detailMap.get("location_id")));
+                    city.setLocationId(Utils.objectToLong(detailMap.get("location_id")));
                     city.setLat(Utils.objectToDouble(detailMap.get("lat")));
                     city.setLon(Utils.objectToDouble(detailMap.get("lon")));
-                    city.setZoom(Utils.objectToInteger(detailMap.get("zoom")));
+                    city.setZoom(Utils.objectToLong(detailMap.get("zoom")));
                 }
 
                 // country
                 LinkedHashMap countryMap = (LinkedHashMap) cityMap.get("country");
                 if (countryMap != null) {
                     Country country = new Country();
-                    country.setId(Utils.objectToInteger(countryMap.get("id")));
+                    country.setId(Utils.objectToLong(countryMap.get("id")));
                     country.setName(Utils.objectToString(countryMap.get("name")));
                     country.setAbbreviation(Utils.objectToString(countryMap.get("abbreviation")));
                     country.setLanguage(Utils.objectToString(countryMap.get("language")));
@@ -115,7 +146,6 @@ public class SahibindenCrawler extends AbstractCrawler {
                 cityList.add(city);
             });
 
-            //cityList.forEach(city -> LOG.debug(String.format("city: %s", city)));
         } catch (IOException e) {
             LOG.error(ExceptionUtils.getStackTrace(e));
         }
@@ -128,29 +158,26 @@ public class SahibindenCrawler extends AbstractCrawler {
         List<Town> townList = new ArrayList<>();
 
         try {
-            Document doc = getDocument(getUrl(URL_TYPE.TOWN, cityId));
-            JSONArray districts = JsonPath.parse(doc.body().text()).read("$.data." + cityId);
+            Document doc = Utils.getJsoupDocument(getUrl(URL_TYPE.TOWN, cityId));
+            List<LinkedHashMap<String, Object>> districts = JsonPath.parse(doc.body().text()).read("$.data." + cityId);
 
-            districts.forEach((item) -> {
-                LinkedHashMap<String, Object> districtMap = (LinkedHashMap<String, Object>) item;
-
+            districts.forEach((districtMap) -> {
 
                 Town town = new Town();
-                town.setId(Utils.objectToInteger(districtMap.get("id")));
+                town.setId(Utils.objectToLong(districtMap.get("id")));
                 town.setName(Utils.objectToString(districtMap.get("name")));
 
                 //detail
                 LinkedHashMap detailMap = (LinkedHashMap) districtMap.get("detail");
                 if (detailMap != null) {
-                    town.setLocationId(Utils.objectToInteger(detailMap.get("location_id")));
+                    town.setLocationId(Utils.objectToLong(detailMap.get("location_id")));
                     town.setLat(Utils.objectToDouble(detailMap.get("lat")));
                     town.setLon(Utils.objectToDouble(detailMap.get("lon")));
-                    town.setZoom(Utils.objectToInteger(detailMap.get("zoom")));
+                    town.setZoom(Utils.objectToLong(detailMap.get("zoom")));
                 }
                 townList.add(town);
             });
 
-            //townList.forEach(district -> LOG.debug(String.format("district: %s", district.toString())));
         } catch (IOException e) {
             LOG.error(ExceptionUtils.getStackTrace(e));
         }
@@ -158,71 +185,54 @@ public class SahibindenCrawler extends AbstractCrawler {
 
     }
 
-    private void crawlDistricts(final List<String> categories, String countryId, City city, Town town) {
+    private List<District> crawlDistricts(Town town) {
+        List<District> districtList = new ArrayList<>();
+
         try {
-            Document doc = getDocument(getUrl(URL_TYPE.DISTRICT, town.getId().toString()));
-            JSONArray districts = JsonPath.parse(doc.body().text()).read("$.data." + town.getId().toString());
+            Document doc = Utils.getJsoupDocument(getUrl(URL_TYPE.DISTRICT, town.getId().toString()));
+            List<LinkedHashMap<String, Object>> districts = JsonPath.parse(doc.body().text()).read("$.data." + town.getId().toString());
 
-            districts.forEach((districtItem) -> {
-
-                LinkedHashMap<String, Object> districtMap = (LinkedHashMap<String, Object>) districtItem;
+            districts.forEach((districtMap) -> {
+                List<Quarter> quarterList = new ArrayList<>();
 
                 District district = new District();
-                district.setId(Utils.objectToInteger(districtMap.get("id")));
+                district.setId(Utils.objectToLong(districtMap.get("id")));
                 district.setName(Utils.objectToString(districtMap.get("name")));
 
                 // quarter (asıl mahalle)
-                JSONArray quarters = (JSONArray) districtMap.get("quarters");
-                quarters.forEach((quarterItem) -> {
-                    LinkedHashMap<String, Object> quarterMap = (LinkedHashMap<String, Object>) quarterItem;
-
+                @SuppressWarnings("unchecked")
+                List<LinkedHashMap<String, Object>> quarters = (List<LinkedHashMap<String, Object>>) districtMap.get("quarters");
+                quarters.forEach((quarterMap) -> {
                     Quarter quarter = new Quarter();
-                    quarter.setId(Utils.objectToInteger(quarterMap.get("id")));
+                    quarter.setId(Utils.objectToLong(quarterMap.get("id")));
                     quarter.setName(Utils.objectToString(quarterMap.get("name")));
-                    quarter.setKmlId(Utils.objectToInteger(quarterMap.get("kmlId")));
+                    quarter.setKmlId(Utils.objectToLong(quarterMap.get("kmlId")));
 
                     //detail
                     LinkedHashMap detailMap = (LinkedHashMap) quarterMap.get("detail");
                     if (detailMap != null) {
-                        quarter.setLocationId(Utils.objectToInteger(detailMap.get("location_id")));
+                        quarter.setLocationId(Utils.objectToLong(detailMap.get("location_id")));
                         quarter.setLat(Utils.objectToDouble(detailMap.get("lat")));
                         quarter.setLon(Utils.objectToDouble(detailMap.get("lon")));
-                        quarter.setZoom(Utils.objectToInteger(detailMap.get("zoom")));
+                        quarter.setZoom(Utils.objectToLong(detailMap.get("zoom")));
                     }
-                    //LOG.debug(String.format("quarter: %s", quarter.toString()));
-
-                    // her bir kategori icin parser'i cagir
-                    categories.forEach(category -> {
-                        String parseUrl = "http://www.sahibinden.com/" + category +
-                            "?address_town=" + town.getId() +
-                            "&address_city=" + city.getId() +
-                            "&address_quarter=" + quarter.getId();
-
-
-
-                        //FIXME: sadece istanbul/ataşehir'i test edelim
-                        if (city.getId() == 1 && quarter.getId() == 46) {
-                            LOG.debug("parse " + parseUrl);
-                            SahibindenEstateParser sahibindenEstateParser= new SahibindenEstateParser(estateRepository);
-                            sahibindenEstateParser.parse(parseUrl);
-                        }
-
-
-                    });
+                    quarterList.add(quarter);
 
                 });
+                district.setQuarterList(quarterList);
+                districtList.add(district);
             });
 
         } catch (IOException e) {
             LOG.error(ExceptionUtils.getStackTrace(e));
         }
+        return districtList;
     }
 
     private LinkedHashMap<String, Integer> crawlSubCategories(String parentCategoryId) {
         try {
-            Document doc = getDocument(getUrl(URL_TYPE.SUB_CATEGORY, parentCategoryId));
-            LinkedHashMap<String, Integer> categories = JsonPath.parse(doc.body().text()).read("$.data.mapping");
-            return categories;
+            Document doc = Utils.getJsoupDocument(getUrl(URL_TYPE.SUB_CATEGORY, parentCategoryId));
+            return JsonPath.parse(doc.body().text()).read("$.data.mapping");
         } catch (IOException e) {
             LOG.error(ExceptionUtils.getStackTrace(e));
         }
@@ -234,7 +244,7 @@ public class SahibindenCrawler extends AbstractCrawler {
         CITY, TOWN, DISTRICT, SUB_CATEGORY
     }
 
-    public static String getUrl(URL_TYPE urlType, String id) {
+    private static String getUrl(URL_TYPE urlType, String id) {
         String url = "";
         long current = System.currentTimeMillis();
         String time = String.valueOf(current) + "_0." + StringUtils.substring(RandomUtil.generateActivationKey(), 0, 15);
@@ -250,18 +260,8 @@ public class SahibindenCrawler extends AbstractCrawler {
             url = String.format("http://www.sahibinden.com/ajax/category/subCategories?lang=tr&time=%s&parentCategoryId=%s&isCustomSelector=true&_=%s", time, id, time2);
         }
 
-        //LOG.debug("url: " + url);
         return url;
     }
 
-    protected static Document getDocument(String url) throws IOException {
-        return Jsoup.connect(url)
-            .timeout(30 * 1000)
-            .referrer("http://www.google.com")
-            .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US;   rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-            .cookie("auth", "token")
-            .ignoreContentType(true)
-            .get();
-    }
 
 }

@@ -4,7 +4,7 @@ package com.totu.service.crawl.sahibinden.domain;
 public class Country {
 
     //"country":{"id":1,"name":"Türkiye","abbreviation":"TR","language":"tr","displayOrder":1,"sortOrder":1,"phoneCode":"+90","status":"ACTIVE","detail":null,"active":true},
-    Integer id;
+    Long id;
     String name;
     String abbreviation;
     String language;
@@ -18,11 +18,11 @@ public class Country {
             id, name, abbreviation, language, displayOrder, sortOrder);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

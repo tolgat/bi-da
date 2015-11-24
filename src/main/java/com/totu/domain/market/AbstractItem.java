@@ -1,4 +1,6 @@
 package com.totu.domain.market;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.data.annotation.Id;
 
 import java.time.ZonedDateTime;
@@ -14,14 +16,19 @@ public abstract class AbstractItem {
     private String url;
     private String remoteId;
     private ZonedDateTime createdDate;
+    private StringBuilder processLog = new StringBuilder();
 
     @Override
     public String toString() {
         return String.format(
-            "AbstractItem[id=%s, resourceSite=%s, name=%s, desc='%s', url='%s', remoteId='%s', indexDate='%s']",
-            id, resourceSite, name, desc, url, remoteId, createdDate);
+            "AbstractItem[id=%s, resourceSite=%s, name=%s, desc='%s', url='%s', remoteId='%s', indexDate='%s', processLog='%s']",
+            id, resourceSite, name, desc, url, remoteId, createdDate, processLog);
     }
 
+    public void appendProcessLog(String message, Exception e) {
+        processLog.append("[").append(message).append(":").append(ExceptionUtils.getRootCauseMessage(e)).append("] ");
+
+    }
     public Site getResourceSite() {
         return resourceSite;
     }
@@ -77,4 +84,6 @@ public abstract class AbstractItem {
     public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
     }
+
+
 }

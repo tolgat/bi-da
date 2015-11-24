@@ -6,7 +6,7 @@ public class City extends LocationDetail {
     //{"id":34,"name":"İstanbul (Tümü)","tag":"istanbul",
     // "country":{"id":1,"name":"Türkiye","abbreviation":"TR","language":"tr","displayOrder":1,"sortOrder":1,"phoneCode":"+90","status":"ACTIVE","detail":null,"active":true},
     // "displayOrder":1,"sortOrder":1,"status":"ACTIVE","detail":{"location_id":534,"lat":41.00527,"lon":28.97696,"zoom":4,"cityId":34},"active":true}
-    Integer id;
+    Long id;
     String name;
     String tag;
     Integer displayOrder;
@@ -20,11 +20,11 @@ public class City extends LocationDetail {
             id, name, tag, displayOrder, sortOrder, country) + super.toString();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
