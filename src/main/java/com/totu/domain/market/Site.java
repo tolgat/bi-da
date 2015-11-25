@@ -1,8 +1,5 @@
 package com.totu.domain.market;
 
-/**
- * Created by tolga on 16.11.2015.
- */
 public enum Site {
 
     HURRIYET_EMLAK(1),

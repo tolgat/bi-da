@@ -2,46 +2,82 @@ package com.totu.service.crawl.sahibinden;
 
 import com.jayway.jsonpath.JsonPath;
 import com.totu.repository.market.EstateRepository;
-import com.totu.service.crawl.AbstractCrawler;
+import com.totu.repository.market.VehicleRepository;
+import com.totu.service.crawl.Crawler;
+import com.totu.service.crawl.SiteParser;
 import com.totu.service.crawl.sahibinden.domain.*;
-import com.totu.service.parser.estate.SahibindenEstateParser;
 import com.totu.service.util.RandomUtil;
 import com.totu.service.util.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 /**
  * JSON sonuclarini alıp kategoriye göre parse eden class'ı çağırır.
  */
-public class SahibindenCrawler extends AbstractCrawler {
+public class SahibindenCrawler implements Crawler {
 
     private static final Logger LOG = LoggerFactory.getLogger(SahibindenCrawler.class);
+    private static final String BASE_URL = "http://www.sahibinden.com/";
 
     private static final String TR_CODE = "1";
 
-    private final EstateRepository estateRepository;
+    private SahibindenEstateParser sahibindenEstateParser;
+    private SahibindenVehicleParser sahibindenVehicleParser;
 
-    public SahibindenCrawler(EstateRepository estateRepository) {
-        this.estateRepository = estateRepository;
+    private static enum URL_TYPE {
+        CITY, TOWN, DISTRICT, SUB_CATEGORY
     }
 
+    public SahibindenCrawler(EstateRepository estateRepository, VehicleRepository vehicleRepository) {
+        sahibindenEstateParser = new SahibindenEstateParser(estateRepository);
+        sahibindenVehicleParser = new SahibindenVehicleParser(vehicleRepository);
+    }
+
+    @Override
     public void crawl() {
-        crawlEstate();
+        String ESTATE_CODE = "3518";
+        LinkedHashMap<String, Integer> estateSubCategories = crawlSubCategories(ESTATE_CODE);
+        if (estateSubCategories != null) {
+            estateSubCategories.forEach((category, value) -> LOG.debug(category + ": " + value));
+        }
+
+        List<City> cityList = crawlCities();
+        if (cityList != null) {
+            cityList.forEach(city -> {
+
+                List<Town> townList = crawlTowns(city.getId().toString());
+                if (townList != null) {
+                    townList.forEach(town -> {
+
+                        crawlVehicle(city, town);
+
+                        List<District> districtList = crawlDistricts(town);
+                        if (districtList != null) {
+                            districtList.forEach(district -> {
+
+                                if (district.getQuarterList() != null) {
+                                    district.getQuarterList().forEach(quarter -> crawlEstate(city, town, quarter));
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 
 
-    private void crawlEstate() {
-
-        // Emlak
+    private void crawlEstate(City city, Town town, Quarter quarter) {
         final List<String> categories = Arrays.asList(
             "satilik",
             "kiralik",
@@ -57,51 +93,86 @@ public class SahibindenCrawler extends AbstractCrawler {
             "emlak-turistik-tesis-satilik",
             "emlak-turistik-tesis-kiralik");
 
-        String ESTATE_CODE = "3518";
-        LinkedHashMap<String, Integer> estateSubCategories = crawlSubCategories(ESTATE_CODE);
-        if (estateSubCategories != null) {
-            estateSubCategories.forEach((category, value) -> LOG.debug(category + ": " + value));
-        }
-
-        List<City> cityList = crawlCities();
-        if (cityList != null) {
-            cityList.forEach(city -> {
-
-                List<Town> townList = crawlTowns(city.getId().toString());
-                if (townList != null) {
-                    townList.forEach(town -> {
-
-                        List<District> districtList = crawlDistricts(town);
-                        if (districtList != null) {
-                            districtList.forEach(district -> {
-
-                                if (district.getQuarterList() != null) {
-                                    district.getQuarterList().forEach(quarter -> {
-
-                                        // her bir kategori icin parser'i cagir
-                                        categories.forEach(category -> {
-                                            String parseUrl = "http://www.sahibinden.com/" + category +
-                                                "?address_town=" + town.getId() +
-                                                "&address_city=" + city.getId() +
-                                                "&address_quarter=" + quarter.getId();
+        categories.forEach(category -> {
+            String parseUrl = BASE_URL + category +
+                "?address_town=" + town.getId() +
+                "&address_city=" + city.getId() +
+                "&address_quarter=" + quarter.getId();
 
 
-                                            //FIXME: sadece istanbul/ataşehir'i test edelim
-                                            if (city.getId() == 1 && quarter.getId() == 293) {
-                                                LOG.debug("parse " + parseUrl);
-                                                SahibindenEstateParser sahibindenEstateParser = new SahibindenEstateParser(estateRepository);
-                                                sahibindenEstateParser.parse(parseUrl);
-                                            }
-                                        });
-                                    });
-                                }
-                            });
-                        }
-                    });
+            //FIXME: sadece istanbul/ataşehir'i test edelim
+            if (city.getId() == -9999991 && quarter.getId() == 293) {
+                LOG.debug("parse estate" + parseUrl);
+                crawlListPage(parseUrl, sahibindenEstateParser);
+            }
+        });
+    }
+
+    private void crawlVehicle(City city, Town town) {
+
+        final List<String> categories = Arrays.asList(
+            "otomobil",
+            "arazi-suv-pick-up",
+            "motosiklet",
+            "minivan-van-panelvan",
+            "ticari-araclar",
+            "kiralik-araclar",
+            "deniz-araclari",
+            "hasarli-araclar",
+            "klasik-araclar",
+            "elektrikli-araclar",
+            "modifiye-araclar",
+            "atv",
+            "utv",
+            "karavan",
+            "engelli-plakali-araclar");
+
+        categories.forEach(category -> {
+            String parseUrl = BASE_URL + category +
+                "?address_town=" + town.getId() +
+                "&address_city=" + city.getId() +
+                "&address_country=1";
+
+            //FIXME: sadece istanbul/ataşehir'i test edelim
+            if (city.getId() == 1 && town.getId() == 4) {
+                LOG.debug("parse vehicle" + parseUrl);
+                crawlListPage(parseUrl, sahibindenVehicleParser);
+            }
+        });
+    }
+
+
+    protected void crawlListPage(String url, SiteParser siteParser) {
+
+        LOG.debug("List page: " + url);
+
+        Set<String> itemUrls = new HashSet<>();
+        Set<String> nextPages = new HashSet<>();
+
+        try {
+            Document doc = Utils.getJsoupDocument(url);
+            Elements links = doc.select("a[href]");
+
+            if (links != null) {
+                for (Element link : links) {
+                    String absUrl = link.attr("abs:href");
+
+                    if (equalsIgnoreCase("Sonraki", link.text())) {
+                        nextPages.add(absUrl);
+                    }
+
+                    if (StringUtils.contains(absUrl, "sahibinden.com/ilan/")) {
+                        itemUrls.add(absUrl);
+                    }
                 }
-            });
-        }
+            }
 
+            itemUrls.forEach(siteParser::parseItem);
+            nextPages.forEach(nextUrl -> crawlListPage(nextUrl, siteParser));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -239,10 +310,6 @@ public class SahibindenCrawler extends AbstractCrawler {
         return null;
     }
 
-
-    private enum URL_TYPE {
-        CITY, TOWN, DISTRICT, SUB_CATEGORY
-    }
 
     private static String getUrl(URL_TYPE urlType, String id) {
         String url = "";

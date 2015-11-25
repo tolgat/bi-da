@@ -1,4 +1,4 @@
-package com.totu.service.parser;
+package com.totu.service.crawl;
 
 import org.apache.commons.lang3.StringUtils;
 

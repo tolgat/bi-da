@@ -2,6 +2,7 @@ package com.totu.service.parser.estate;
 
 import com.totu.IntegrationTestAbstractTestNg;
 import com.totu.repository.market.EstateRepository;
+import com.totu.service.crawl.sahibinden.SahibindenEstateParser;
 import org.testng.annotations.Test;
 
 import javax.inject.Inject;

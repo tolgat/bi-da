@@ -1,36 +1,23 @@
 package com.totu.domain.market;
 
 
-import java.util.Map;
-
 public class Estate extends AbstractItem {
 
-    private String publishDateStr;
-    private String title;
-    private Long price;
-    private String currency;
-    private String rooms;
+    private String oda;
     private String m2;
-    private String m2Price;
-    private String type; // Satılık Daire
-    private String age;
-    private String floor; // bulundugu kat
-    private String totalFloors;
-    private String bathrooms;
-    private Boolean withFurniture;
-    private Boolean inSite;
-    private String siteMonthlyFee; //aidat
-    private Boolean creditable;
-    private String seller;
-    private String heating;
+    private String m2Fiyat;
+    private String tip; // Satılık Daire
+    private String yas;
+    private String kat;
+    private String toplamKat;
+    private String banyo;
+    private Boolean esyali;
+    private Boolean siteIcınde;
+    private String aidat;
+    private Boolean kreidyeUygun;
+    private String kimden;
+    private String isinma;
 
-
-    // location
-    private String city;
-    private String district; // ilçe
-    private String neighborhood;
-
-    //
     private String ada;
     private String parsel;
     private String pafta;
@@ -40,62 +27,17 @@ public class Estate extends AbstractItem {
     private String imar;
     private String takas;
 
-    private String numberOfHouseInAFloor;
-
+    private String kattakiDaireSayisi;
 
     private String donem;
     private String sure;
 
-
-    private Map properties;
-
-
-    @Override
-    public String toString() {
-        return String.format(
-            "AbstractItem[%s, resourceSite= %s, externalId=%s, price=%d, rooms='%s']",
-            super.toString(), price, rooms);
+    public String getOda() {
+        return oda;
     }
 
-
-    public String getPublishDateStr() {
-        return publishDateStr;
-    }
-
-    public void setPublishDateStr(String publishDateStr) {
-        this.publishDateStr = publishDateStr;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(String rooms) {
-        this.rooms = rooms;
+    public void setOda(String oda) {
+        this.oda = oda;
     }
 
     public String getM2() {
@@ -106,116 +48,100 @@ public class Estate extends AbstractItem {
         this.m2 = m2;
     }
 
-    public String getM2Price() {
-        return m2Price;
+    public String getM2Fiyat() {
+        return m2Fiyat;
     }
 
-    public void setM2Price(String m2Price) {
-        this.m2Price = m2Price;
+    public void setM2Fiyat(String m2Fiyat) {
+        this.m2Fiyat = m2Fiyat;
     }
 
-    public String getType() {
-        return type;
+    public String getTip() {
+        return tip;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTip(String tip) {
+        this.tip = tip;
     }
 
-    public String getAge() {
-        return age;
+    public String getYas() {
+        return yas;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setYas(String yas) {
+        this.yas = yas;
     }
 
-    public String getFloor() {
-        return floor;
+    public String getKat() {
+        return kat;
     }
 
-    public void setFloor(String floor) {
-        this.floor = floor;
+    public void setKat(String kat) {
+        this.kat = kat;
     }
 
-    public String getTotalFloors() {
-        return totalFloors;
+    public String getToplamKat() {
+        return toplamKat;
     }
 
-    public void setTotalFloors(String totalFloors) {
-        this.totalFloors = totalFloors;
+    public void setToplamKat(String toplamKat) {
+        this.toplamKat = toplamKat;
     }
 
-    public String getBathrooms() {
-        return bathrooms;
+    public String getBanyo() {
+        return banyo;
     }
 
-    public void setBathrooms(String bathrooms) {
-        this.bathrooms = bathrooms;
+    public void setBanyo(String banyo) {
+        this.banyo = banyo;
     }
 
-    public Boolean getWithFurniture() {
-        return withFurniture;
+    public Boolean getEsyali() {
+        return esyali;
     }
 
-    public void setWithFurniture(Boolean withFurniture) {
-        this.withFurniture = withFurniture;
+    public void setEsyali(Boolean esyali) {
+        this.esyali = esyali;
     }
 
-    public Boolean getInSite() {
-        return inSite;
+    public Boolean getSiteIcınde() {
+        return siteIcınde;
     }
 
-    public void setInSite(Boolean inSite) {
-        this.inSite = inSite;
+    public void setSiteIcınde(Boolean siteIcınde) {
+        this.siteIcınde = siteIcınde;
     }
 
-    public String getSiteMonthlyFee() {
-        return siteMonthlyFee;
+    public String getAidat() {
+        return aidat;
     }
 
-    public void setSiteMonthlyFee(String siteMonthlyFee) {
-        this.siteMonthlyFee = siteMonthlyFee;
+    public void setAidat(String aidat) {
+        this.aidat = aidat;
     }
 
-    public Boolean getCreditable() {
-        return creditable;
+    public Boolean getKreidyeUygun() {
+        return kreidyeUygun;
     }
 
-    public void setCreditable(Boolean creditable) {
-        this.creditable = creditable;
+    public void setKreidyeUygun(Boolean kreidyeUygun) {
+        this.kreidyeUygun = kreidyeUygun;
     }
 
-    public String getSeller() {
-        return seller;
+    public String getKimden() {
+        return kimden;
     }
 
-    public void setSeller(String seller) {
-        this.seller = seller;
+    public void setKimden(String kimden) {
+        this.kimden = kimden;
     }
 
-    public String getCity() {
-        return city;
+    public String getIsinma() {
+        return isinma;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getNeighborhood() {
-        return neighborhood;
-    }
-
-    public void setNeighborhood(String neighborhood) {
-        this.neighborhood = neighborhood;
+    public void setIsinma(String isinma) {
+        this.isinma = isinma;
     }
 
     public String getAda() {
@@ -282,28 +208,12 @@ public class Estate extends AbstractItem {
         this.takas = takas;
     }
 
-    public Map getProperties() {
-        return properties;
+    public String getKattakiDaireSayisi() {
+        return kattakiDaireSayisi;
     }
 
-    public void setProperties(Map properties) {
-        this.properties = properties;
-    }
-
-    public String getNumberOfHouseInAFloor() {
-        return numberOfHouseInAFloor;
-    }
-
-    public void setNumberOfHouseInAFloor(String numberOfHouseInAFloor) {
-        this.numberOfHouseInAFloor = numberOfHouseInAFloor;
-    }
-
-    public String getHeating() {
-        return heating;
-    }
-
-    public void setHeating(String heating) {
-        this.heating = heating;
+    public void setKattakiDaireSayisi(String kattakiDaireSayisi) {
+        this.kattakiDaireSayisi = kattakiDaireSayisi;
     }
 
     public String getDonem() {

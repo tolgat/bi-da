@@ -1,5 +1,6 @@
 package com.totu.domain.market;
 
+import com.mongodb.BasicDBList;
 import org.springframework.data.annotation.Id;
 
 import java.time.ZonedDateTime;
@@ -10,27 +11,20 @@ public abstract class AbstractItem {
     @Id
     private String id;
     private Site resourceSite;
-    private String name;
-    private String desc;
     private String url;
     private String remoteId;
-    private ZonedDateTime createdDate;
+    private String publishDateAsStr;
+    private ZonedDateTime createDate;
+    private ZonedDateTime lastSeenDate;
     private String processLog;
-
-    @Override
-    public String toString() {
-        return String.format(
-            "AbstractItem[id=%s, resourceSite=%s, name=%s, desc='%s', url='%s', remoteId='%s', indexDate='%s', processLog='%s']",
-            id, resourceSite, name, desc, url, remoteId, createdDate, processLog);
-    }
-
-    public Site getResourceSite() {
-        return resourceSite;
-    }
-
-    public void setResourceSite(Site resourceSite) {
-        this.resourceSite = resourceSite;
-    }
+    private BasicDBList properties;
+    private String title;
+    private Long price;
+    private String currency;
+    // location
+    private String il;
+    private String ilce;
+    private String mahalle;
 
     public String getId() {
         return id;
@@ -40,20 +34,12 @@ public abstract class AbstractItem {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Site getResourceSite() {
+        return resourceSite;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setResourceSite(Site resourceSite) {
+        this.resourceSite = resourceSite;
     }
 
     public String getUrl() {
@@ -72,12 +58,28 @@ public abstract class AbstractItem {
         this.remoteId = remoteId;
     }
 
-    public ZonedDateTime getCreatedDate() {
-        return createdDate;
+    public String getPublishDateAsStr() {
+        return publishDateAsStr;
     }
 
-    public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
+    public void setPublishDateAsStr(String publishDateAsStr) {
+        this.publishDateAsStr = publishDateAsStr;
+    }
+
+    public ZonedDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(ZonedDateTime createDate) {
+        this.createDate = createDate;
+    }
+
+    public ZonedDateTime getLastSeenDate() {
+        return lastSeenDate;
+    }
+
+    public void setLastSeenDate(ZonedDateTime lastSeenDate) {
+        this.lastSeenDate = lastSeenDate;
     }
 
     public String getProcessLog() {
@@ -86,5 +88,61 @@ public abstract class AbstractItem {
 
     public void setProcessLog(String processLog) {
         this.processLog = processLog;
+    }
+
+    public BasicDBList getProperties() {
+        return properties;
+    }
+
+    public void setProperties(BasicDBList properties) {
+        this.properties = properties;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getIl() {
+        return il;
+    }
+
+    public void setIl(String il) {
+        this.il = il;
+    }
+
+    public String getIlce() {
+        return ilce;
+    }
+
+    public void setIlce(String ilce) {
+        this.ilce = ilce;
+    }
+
+    public String getMahalle() {
+        return mahalle;
+    }
+
+    public void setMahalle(String mahalle) {
+        this.mahalle = mahalle;
     }
 }

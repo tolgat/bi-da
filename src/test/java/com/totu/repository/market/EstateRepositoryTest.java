@@ -32,15 +32,15 @@ public class EstateRepositoryTest {
 
         Estate estate1 = new Estate();
         estate1.setPrice(300000L);
-        estate1.setRooms("3+1");
-        estate1.setDesc("Küçükbakkalköyde Kelepir Daire");
+        estate1.setOda("3+1");
+        estate1.setTitle("Küçükbakkalköyde Kelepir Daire");
 
         repository.save(estate1);
 
         Estate estate2 = new Estate();
         estate2.setPrice(300000L);
-        estate2.setRooms("3+1");
-        estate2.setDesc("Acıbademde 3+2 Daire");
+        estate2.setOda("3+1");
+        estate2.setTitle("Acıbademde 3+2 Daire");
 
         repository.save(estate2);
 
