@@ -69,8 +69,10 @@ public class Utils {
     public static boolean equalOrBothNull(Long long1, Long long2) {
         if (long1 != null && long2 != null) {
             return long1.longValue() == long2.longValue();
+        } else if (long1 == null && long2 == null) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 

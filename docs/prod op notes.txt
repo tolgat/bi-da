@@ -1,2 +1,16 @@
 mongodb'de alttaki index'i yarat!
-db.estate.createIndex({"resourceSite":1, "remoteId":1})
+db.ALL_COLLECTIONS.createIndex({"resourceSite":1, "remoteId":1})
+
+
+ec2 ubuntu 14.4
+
+## mongodb
+mongodb kurulur. Mongodb.com'daki Ubuntu sayfasaındaki deyalar ile kuruldu.
+
+mongo console hata verdi ve alttaki komut ile başladi.
+export LC_ALL=C
+mongo
+
+
+### mysql
+mysql -h bidadb.c1cpck5y9n2g.eu-central-1.rds.amazonaws.com -u bidauser -ppassword kabalak01

@@ -83,6 +83,8 @@ public class SahibindenHelper {
 
         Price price = new Price();
 
+        s = StringUtils.remove(s, "Kredi Teklifleri");
+
         if (StringUtils.contains(s, "TL")) {
             s = StringUtils.remove(s, "TL");
             price.setCurrency("TL");
